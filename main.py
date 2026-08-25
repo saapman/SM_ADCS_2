@@ -6,8 +6,8 @@ print(sys.executable)
 
 import numpy as np
 from adcs_sim.config   import SimConfig
-from adcs_sim          import sim_runner
-from adcs_sim.plotting import plot_results
+from adcs_sim          import sim_runner, estimation_demo
+from adcs_sim.plotting import plot_results, plot_estimation_results
 
 
 def scenario_free_tumble():
@@ -51,7 +51,19 @@ def scenario_pd_with_desaturation():
     return hist
 
 
+def scenario_mekf_estimation():
+    print("=" * 60)
+    print("SCENARIO 4 — MEKF attitude/bias estimation (truth vs. estimate)")
+    print("=" * 60)
+    cfg = SimConfig()
+    cfg.duration = 6000.0           # ≈ 1 orbit
+    hist = estimation_demo.run(cfg, initial_attitude_error_deg=15.0)
+    plot_estimation_results(hist, title="MEKF — Attitude & Gyro-Bias Convergence")
+    return hist
+
+
 if __name__ == "__main__":
     h1 = scenario_free_tumble()
     h2 = scenario_pd_detumble()
     # h3 = scenario_pd_with_desaturation()      # uncomment when ready
+    h4 = scenario_mekf_estimation()

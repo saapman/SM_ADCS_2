@@ -70,3 +70,31 @@ def plot_results(hist, title="ADCS Simulation"):
 
     plt.tight_layout()
     plt.show()
+
+
+def plot_estimation_results(hist, title="MEKF Attitude Estimation"):
+    """Truth-vs-estimate convergence plot for the MEKF demo."""
+    t = hist.t / 60.0                        # minutes
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+    fig.suptitle(title, fontsize=14)
+
+    ax = axes[0]
+    ax.plot(t, hist.attitude_error_deg, linewidth=0.8, label="Attitude error")
+    ax.plot(t, 3.0 * hist.sigma_theta_deg, linewidth=0.8, linestyle="--",
+            color="tab:red", label="3$\\sigma$ bound")
+    ax.set_ylabel("Attitude estimation error (°)")
+    ax.set_xlabel("Time (min)")
+    ax.set_title("Estimated vs. true attitude")
+    ax.legend(fontsize=8)
+    ax.grid(True, alpha=0.3)
+
+    ax = axes[1]
+    ax.plot(t, hist.bias_error_deg_s, linewidth=0.8, color="tab:orange")
+    ax.set_ylabel("Gyro-bias estimation error (°/s)")
+    ax.set_xlabel("Time (min)")
+    ax.set_title("Gyro-bias convergence")
+    ax.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.show()
